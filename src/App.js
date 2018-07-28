@@ -1,23 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
 
-function ChildrenSender(object) {
-  if (object.length < 1) return;
-
-  let Childs = object.map(o => {
-    if (o.children.length)
-      return (
-        <li>
-          {" "}
-          <a href="">{o.title}</a> {ChildrenSender(o.children)}{" "}
-        </li>
-      );
-    else return <li> {o.title}</li>;
-  });
-
-  return <ul> {Childs} </ul>;
-}
-
 let tree = [
   {
     title: "first",
@@ -27,34 +10,10 @@ let tree = [
         children: [
           {
             title: "first-child",
-            children: []
-          },
-          {
-            title: "first-child",
-            children: []
-          },
-          {
-            title: "first-child",
-            children: []
-          },
-          {
-            title: "first-child",
             children: [
               {
                 title: "first-child",
                 children: [
-                  {
-                    title: "first-child",
-                    children: []
-                  },
-                  {
-                    title: "first-child",
-                    children: []
-                  },
-                  {
-                    title: "first-child",
-                    children: []
-                  },
                   {
                     title: "first-child",
                     children: [
@@ -114,30 +73,42 @@ let tree = [
 ];
 
 class App extends Component {
-  // componentDidMount() {
-  //   var tree = document.querySelectorAll("ul.tree a:not(:last-child)");
-  //   console.log(tree);
-  //   for (var i = 0; i < tree.length; i++) {
-  //     tree[i].addEventListener("click", function(e) {
-  //       console.log(e.target.innerHTML);
-  //       var parent = e.target.parentElement;
-  //       var classList = parent.classList;
-  //       // console.log(parent, classList);
-  //       if (classList.contains("open")) {
-  //         classList.remove("open");
-  //         var opensubs = parent.querySelectorAll(".open");
-  //         console.log(opensubs);
-  //         for (var i = 0; i < opensubs.length; i++) {
-  //           opensubs[i].classList.remove("open");
-  //         }
-  //       } else {
-  //         classList.add("open");
-  //       }
-  //     });
-  //   }
-  // }
+  ChildrenSender(object) {
+    if (object.length < 1) return;
+    let Childs = object.map(o => {
+      if (o.children.length)
+        return (
+          <li key={o.title + Math.random()}>
+            {" "}
+            <a href="" onClick={e => this.handleClick(e)}>
+              {o.title}
+            </a>{" "}
+            {this.ChildrenSender(o.children)}{" "}
+          </li>
+        );
+      else return <li key={o.title + Math.random()}> {o.title}</li>;
+    });
+
+    return <ul> {Childs} </ul>;
+  }
+
+  handleClick(e) {
+    e.preventDefault();
+    var parent = e.target.parentElement;
+    var classList = parent.classList;
+    if (classList.contains("open")) {
+      classList.remove("open");
+      var opensubs = parent.querySelectorAll(".open");
+      for (var i = 0; i < opensubs.length; i++) {
+        opensubs[i].classList.remove("open");
+      }
+    } else {
+      classList.add("open");
+    }
+  }
+
   render() {
-    let Outer = ChildrenSender(tree);
+    let Outer = <div className="tree"> {this.ChildrenSender(tree)} </div>;
     return <div className="App">{Outer}</div>;
   }
 }
