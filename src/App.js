@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+let preserveOpened = true;
 
 let tree = [
   {
@@ -88,7 +89,7 @@ class App extends Component {
         );
       else
         return (
-          <li class="inner" key={o.title + Math.random()}>
+          <li className="inner" key={o.title + Math.random()}>
             {" "}
             {o.title}
           </li>
@@ -104,9 +105,11 @@ class App extends Component {
     var classList = parent.classList;
     if (classList.contains("open")) {
       classList.remove("open");
-      var opensubs = parent.querySelectorAll(".open");
-      for (var i = 0; i < opensubs.length; i++) {
-        opensubs[i].classList.remove("open");
+      if (!preserveOpened) {
+        var opensubs = parent.querySelectorAll(".open");
+        for (var i = 0; i < opensubs.length; i++) {
+          opensubs[i].classList.remove("open");
+        }
       }
     } else {
       classList.add("open");
