@@ -86,7 +86,13 @@ class App extends Component {
             {this.ChildrenSender(o.children)}{" "}
           </li>
         );
-      else return <li key={o.title + Math.random()}> {o.title}</li>;
+      else
+        return (
+          <li class="inner" key={o.title + Math.random()}>
+            {" "}
+            {o.title}
+          </li>
+        );
     });
 
     return <ul> {Childs} </ul>;
